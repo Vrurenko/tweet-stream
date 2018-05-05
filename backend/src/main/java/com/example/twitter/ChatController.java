@@ -11,7 +11,7 @@ public class ChatController {
     @RequestMapping("/api/hi")
     @CrossOrigin(origins = "http://localhost:4200")
     public Collection<String> hi() {
-        return new ArrayList<>() {
+        return new ArrayList<String>() {
             {
                 add("One");
                 add("Two");
