@@ -27,6 +27,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>
+		<frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
+		<frontend-maven-plugin.node.version>v7.7.2</frontend-maven-plugin.node.version>
+		<frontend-maven-plugin.npm.version>4.0.5</frontend-maven-plugin.npm.version>
+		<spring-boot.version>1.4.3.RELEASE</spring-boot.version>
 	</properties>
 
 	<dependencies>
@@ -37,18 +42,93 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.example.twitter.TwitterApplication</mainClass>
-					<jvmArguments>--add-modules java.xml.bind,java.xml.ws,java.xml.ws.annotation</jvmArguments>
-				</configuration>
-			</plugin>
-		</plugins>
-
-		<!--<sourceDirectory>backend/src/main/java</sourceDirectory>-->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>frontend/node_modules</directory>
+								<includes>**</includes>
+								<followSymlinks>false</followSymlinks>
+							</fileset>
+						</filesets>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin-version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.github.eirslett</groupId>
+					<artifactId>frontend-maven-plugin</artifactId>
+					<version>${frontend-maven-plugin.version}</version>
+					<configuration>
+						<nodeVersion>${frontend-maven-plugin.node.version}</nodeVersion>
+						<npmVersion>${frontend-maven-plugin.npm.version}</npmVersion>
+						<installDirectory>target</installDirectory>
+					</configuration>
+					<executions>
+						<execution>
+							<id>install node and npm</id>
+							<goals>
+								<goal>install-node-and-npm</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>npm install</id>
+							<goals>
+								<goal>npm</goal>
+							</goals>
+							<configuration>
+								<arguments>install</arguments>
+							</configuration>
+						</execution>
+						<execution>
+							<id>npm build</id>
+							<goals>
+								<goal>npm</goal>
+							</goals>
+							<configuration>
+								<arguments>run build</arguments>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring-boot.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>frontend/node_modules</directory>
+								<includes>**</includes>
+								<followSymlinks>false</followSymlinks>
+							</fileset>
+						</filesets>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 
