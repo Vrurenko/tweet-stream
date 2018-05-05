@@ -15,7 +15,7 @@ public class ChatController {
             {
                 add("One");
                 add("Two");
-                add("Three ");
+                add("Three");
             }
         };
     }
